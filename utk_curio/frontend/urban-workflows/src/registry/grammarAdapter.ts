@@ -1,14 +1,27 @@
 /**
- * GrammarAdapter: pluggable interface for grammar-based visualizations.
+ * Pluggable interface for grammar-based visualizations.
  *
- * Each grammar toolkit (Vega-Lite, UTK, future D3/Scout) implements this
- * interface and registers itself via registerGrammarAdapter().
+ * **Purpose:** GrammarAdapter abstracts the compile-and-render logic for each
+ * grammar toolkit (Vega-Lite, UTK, D3). Implementations validate specs,
+ * render into DOM containers, and optionally provide default specs and cleanup.
+ * This allows grammar boxes to share a common contract while each toolkit
+ * handles its own rendering details.
  *
- * GrammarVisBox (or individual grammar boxes) call getGrammarAdapter(grammarId)
- * to obtain the correct adapter at runtime.
+ * **Function:** Consumed by:
+ * - **Lifecycle hooks** — Box lifecycles (e.g. d3Lifecycle) call
+ *   `getGrammarAdapter(grammarId)` to obtain the adapter, then use
+ *   `validate`, `render`, and `getDefaultSpec` when implementing
+ *   `applyGrammar` for the BoxEditor.
+ * - **Registry** — Adapters register at module load via
+ *   `registerGrammarAdapter()` (triggered by registry index imports).
+ *
+ * **Lifecycle:** Adapters are registered when vegaLiteAdapter, utkAdapter, or
+ * d3Adapter modules are imported. The `grammarId` must match the descriptor's
+ * `grammarId` (e.g. 'vega-lite', 'utk', 'd3') so lifecycles can look them up.
  */
 
 export interface GrammarAdapter {
+  /** Unique id; must match BoxDescriptor.grammarId for lookup. */
   grammarId: string;
 
   /** Validate a grammar specification before rendering. */

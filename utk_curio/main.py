@@ -238,6 +238,23 @@ def start_frontend(force_rebuild=False, no_server=False):
     os.chdir(original_dir)
     return process
 
+def run_frontend_tests():
+    """Run Jest unit tests for the frontend."""
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    test_dir = os.path.join(script_dir, "frontend", "urban-workflows")
+
+    if not os.path.exists(test_dir):
+        log_error(f"[Frontend] Test directory not found: {test_dir}")
+        sys.exit(1)
+
+    log_info("[Frontend] Running Jest unit tests...", COLOR_FRONTEND, 0)
+    result = subprocess.run(
+        ["npm", "run", "test"],
+        cwd=test_dir,
+        shell=shell_required,
+    )
+    sys.exit(result.returncode)
+
 def prepare_backend_database(force=False):
     # script_dir = os.path.dirname(os.path.abspath(__file__))
     # backend_dir = os.path.join(script_dir, "backend")
@@ -391,7 +408,7 @@ def main():
     )
     
     parser.add_argument(
-        "command", nargs="?", choices=["start"], help="Command to execute (start)"
+        "command", nargs="?", choices=["start", "test"], help="Command to execute (start, test)"
     )
     parser.add_argument(
         "server", nargs="?", default="all", choices=["all", "frontend", "backend", "sandbox"],
@@ -456,6 +473,13 @@ def main():
     else:
         args.force_rebuild = False
         args.force_db_init = False
+
+    if args.command == "test":
+        if args.server == "frontend":
+            run_frontend_tests()
+        else:
+            log_error(f"No tests available for '{args.server}'. Available: frontend")
+            sys.exit(1)
 
     if args.command == "start":
         if args.server == "all":

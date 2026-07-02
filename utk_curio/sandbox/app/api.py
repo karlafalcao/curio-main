@@ -86,7 +86,7 @@ def list_datasets():
     return jsonify(files)
 
 @app.route('/exec', methods=['POST'])
-# @cache.cached(make_cache_key=make_key)
+@cache.cached(make_cache_key=make_key)
 def exec():
     import time
     start_time = time.time()

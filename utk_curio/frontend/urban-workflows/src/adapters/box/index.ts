@@ -8,6 +8,7 @@ export { useTextLifecycle } from './textLifecycle';
 export { useFlowSwitchLifecycle } from './flowSwitchLifecycle';
 export { useMergeFlowLifecycle } from './mergeFlowLifecycle';
 export { useDataPoolLifecycle } from './dataPoolLifecycle';
+export { useD3Lifecycle } from './d3Lifecycle';
 
 export { standardInOut, outputOnly, inputOnly, withBidirectional, flowSwitchHandles } from './handleHelpers';
 

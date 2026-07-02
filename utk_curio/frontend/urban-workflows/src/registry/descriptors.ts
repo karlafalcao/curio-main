@@ -15,6 +15,7 @@ import {
   faFont,
   faCube,
   faChartLine,
+  faChartArea,
   faCopy,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -36,6 +37,7 @@ import {
   useFlowSwitchLifecycle,
   useMergeFlowLifecycle,
   useDataPoolLifecycle,
+  useD3Lifecycle,
 } from '../adapters/box';
 
 const ALL_TYPES = [
@@ -370,6 +372,37 @@ registerNode({
     outputIconType: '1',
     showTemplateModal: false,
     useLifecycle: useImageLifecycle,
+  },
+});
+
+registerNode({
+  id: BoxType.VIS_D3,
+  category: 'vis_grammar',
+  label: 'D3 Chart',
+  icon: faChartArea,
+  inputPorts: [{ types: TABULAR_DATA, cardinality: '1' }],
+  outputPorts: [{ types: TABULAR_DATA, cardinality: '1' }],
+  editor: 'grammar',
+  grammarId: 'd3',
+  inPalette: true,
+  paletteOrder: 11,
+  description: 'Custom D3.js visualization (point, line, or bar). Execute with the play button.',
+  hasCode: false,
+  hasWidgets: true,
+  hasGrammar: true,
+  adapter: {
+    handles: withBidirectional(standardInOut()),
+    editor: {
+      code: false,
+      grammar: true,
+      widgets: true,
+      outputId: (nodeId) => 'd3' + nodeId,
+    },
+    container: { handleType: 'in/out' },
+    inputIconType: '1',
+    outputIconType: '1',
+    showTemplateModal: true,
+    useLifecycle: useD3Lifecycle,
   },
 });
 
