@@ -1,0 +1,61 @@
+{
+  "dataflow": {
+    "nodes": [
+      {
+        "id": "0d496aca-5db5-4495-9cd0-83c81a55e96a",
+        "type": "COMPUTATION_ANALYSIS",
+        "x": 228.5,
+        "y": 157.5,
+        "content": "# load box\nimport utk\n\nuc = utk.OSM.load([42.336844, -71.113459, 42.345559, -71.099216], layers=[{'name':'buildings', 'args': {'sizeCells': 5}}, {'name':'surface', 'args': {'sizeCells': 5}}, 'parks'])\n\n# buildings\ngdf_buildings = uc.layers['gdf']['sections'][0]\ngdf_buildings['thematic'] = 0.5\ngdf_buildings.metadata = {\n 'name': 'buildings'\n}\n\n#surface\njson_surface = uc.layers['json'][1]\ngdf_surface = uc.layers['gdf']['objects'][1]\ngdf_surface.metadata = {\n 'name': 'surface'\n}\n\n#parks\njson_parks = uc.layers['json'][2]\ngdf_parks = uc.layers['gdf']['objects'][2]\ngdf_parks.metadata = {\n 'name': 'parks'\n}\n\nreturn (json_surface, json_parks, gdf_buildings, gdf_surface, gdf_parks)",
+        "out": "DEFAULT",
+        "in": "DEFAULT",
+        "goal": "",
+        "metadata": {
+          "keywords": []
+        }
+      },
+      {
+        "id": "8d248736-1aa4-4c02-b05d-b07c9ff40d31",
+        "type": "COMPUTATION_ANALYSIS",
+        "x": 861.5676819415255,
+        "y": 164.06279898936916,
+        "content": "return arg[2]",
+        "out": "DEFAULT",
+        "in": "DEFAULT",
+        "goal": "",
+        "metadata": {
+          "keywords": []
+        }
+      },
+      {
+        "id": "765fd199-7ae1-4e9f-ade0-3e50b315e980",
+        "type": "VIS_UTK",
+        "x": 1492.5278480044242,
+        "y": 220.37612893771154,
+        "content": "{\n    \"components\": [\n        {\n            \"id\": \"grammar_map\",\n            \"position\": {\n                \"width\": [\n                    1,\n                    12\n                ],\n                \"height\": [\n                    1,\n                    4\n                ]\n            }\n        }\n    ],\n    \"knots\": [],\n    \"ex_knots\": [\n        {\n            \"id\": \"buildings0\",\n            \"out_name\": \"buildings\",\n            \"in_name\": \"thematic\"\n        }\n    ],\n    \"grid\": {\n        \"width\": 12,\n        \"height\": 4\n    },\n    \"grammar\": false\n}",
+        "out": "DEFAULT",
+        "in": "DEFAULT",
+        "goal": "",
+        "metadata": {
+          "keywords": []
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "reactflow__edge-0d496aca-5db5-4495-9cd0-83c81a55e96aout-8d248736-1aa4-4c02-b05d-b07c9ff40d31in",
+        "source": "0d496aca-5db5-4495-9cd0-83c81a55e96a",
+        "target": "8d248736-1aa4-4c02-b05d-b07c9ff40d31"
+      },
+      {
+        "id": "reactflow__edge-8d248736-1aa4-4c02-b05d-b07c9ff40d31out-765fd199-7ae1-4e9f-ade0-3e50b315e980in",
+        "source": "8d248736-1aa4-4c02-b05d-b07c9ff40d31",
+        "target": "765fd199-7ae1-4e9f-ade0-3e50b315e980"
+      }
+    ],
+    "name": "DefaultWorkflow",
+    "task": "",
+    "timestamp": 1771968123719,
+    "provenance_id": "DefaultWorkflow"
+  }
+}

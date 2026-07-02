@@ -116,7 +116,8 @@ def base_url(servers: dict, port_key: str) -> str:
 # ---------------------------------------------------------------------------
 
 def upload_workflow(
-    page, app_frontend, workflow_file: str, expected_node_count: int
+    page, app_frontend, workflow_file: str, expected_node_count: int,
+    node_wait_timeout: float = 15000,
 ):
     """Navigate to the app, open the File menu, upload a workflow JSON,
     and wait until the expected number of nodes appear on the canvas."""
@@ -156,7 +157,7 @@ def upload_workflow(
     page.wait_for_function(
         f"document.querySelectorAll('.react-flow__node').length >= "
         f"{expected_node_count}",
-        timeout=15000,
+        timeout=node_wait_timeout,
     )
     # hide the tools menu bar so it doesn't interfere with the test
     # get parent of #step-loading
